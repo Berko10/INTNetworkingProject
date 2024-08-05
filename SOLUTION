@@ -1,26 +1,32 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+127.0.0.53
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
+10.0.0.1
 
 
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
+These are the 4 phases in dhcpcd logs version:
+Discover : dhcpcd[434]: enX0: soliciting a DHCP lease
+Offer : dhcpcd[434]: enX0: offered 10.0.0.117 from 10.0.0.1
+Request : dhcpcd[434]: enX0: leased 10.0.0.117 for 3600 seconds
+Ack : dhcpcd[434]: enX0: adding route to 10.0.0.0/24
+
+
 
 
 
 Public to private num of hops
 -------------------
-<answer-here>
+1
 
 
 DNS queries from the private instance
 -------------------
-<answer-here>
+Yes. its possible to reslove DNS address of a public website from the private instance because, in its vpc there's a local DNS server, and it communicates with it and not with the internet.
