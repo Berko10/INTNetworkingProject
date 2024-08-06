@@ -80,7 +80,7 @@ decoded_message=$(echo "$encryptedSampleMessage" | base64 -d)
 echo "decoded_message is: $decoded_message"
 echo "master key is: $master_key"
 echo "file is $master_key_file"
-decrypted_message=$(echo "$decoded_message" | openssl enc -d -aes-256-cbc -pbkdf2 -k "$master_key" -nopad)
+decrypted_message=$(echo "$decoded_message" | openssl enc -d -aes-256-cbc -pbkdf2 -k "$master_key")
 #if [ $? -ne 0 ]; then
 #  echo "Decryption failed."
 #  exit 7
