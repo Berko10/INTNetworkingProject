@@ -74,8 +74,9 @@ echo "sample message is: $sampleMessage"
 keyExchange_response=$(curl -s -X POST -H "Content-Type: application/json" -d "$keyExchange_json" "$keyExchange_url")
 echo "keyExchange_response is: $keyExchange_response"
 encryptedSampleMessage=$(echo "$keyExchange_response" | jq -r '.encryptedSampleMessage')
-decoded_message=$(echo "$encryptedSampleMessage" | base64 -d)
-echo "decoded_message is: $decoded_message"
+echo "$encryptedSampleMessage" | od -c
+decoded_message=$(echo "$encryptedSampleMessage" | tr -d '0' | base64 -d)
+echo "decoded_message is: $decoded_message" | od -c
 echo "master key is: $master_key"
 echo "file is $master_key_file"
 decrypted_message=$(echo "$decoded_message" | openssl enc -d -aes-256-cbc -pbkdf2 -k "$master_key")
