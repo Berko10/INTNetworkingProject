@@ -22,13 +22,11 @@ EOF
 )
 # Response for the post method
 response=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" "$url")
-clean_response=$(echo "$response" | tr -d '\0')
-echo "clean repsonse: $clean_response"
 # Save sessionID and serverCert for later use
-sessionID=$(echo "$clean_response" | jq -r '.sessionID')
+sessionID=$(echo "$response" | jq -r '.sessionID')
 echo "sessionID is: $sessionID"
 serverCert="serverCert.pem"
-echo "$clean_response" | jq -r '.serverCert' | sed 's/[[:space:]]*$//' > "$serverCert"
+echo "$response" | jq -r '.serverCert' | sed 's/[[:space:]]*$//' > "$serverCert"
 echo "Saved sessionID and serverCert"
 echo "serverCert is: "
 cat "$serverCert"
