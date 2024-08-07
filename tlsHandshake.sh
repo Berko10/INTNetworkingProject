@@ -20,13 +20,16 @@ json=$(cat <<'EOF'
 }
 EOF
 )
+
+echo "json is $json and url is $url"
 # Response for the post method
 response=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" "$url")
+echo "response is: $response"
 # Save sessionID and serverCert for later use
 sessionID=$(echo "$response" | jq -r '.sessionID')
 echo "sessionID is: $sessionID"
 serverCert="serverCert.pem"
-echo "$response" | jq -r '.serverCert' | sed 's/[[:space:]]*$//' > "$serverCert"
+echo "$response" | jq -r '.serverCert' > "$serverCert"
 echo "Saved sessionID and serverCert"
 echo "serverCert is: "
 cat "$serverCert"
@@ -53,7 +56,7 @@ fi
 
 # Check the certificate validation and prints the result
 validation_result=$(openssl verify -CAfile "$certCaAws" "$serverCert")
-echo "$validation_result" "$expectedOutput"
+echo "validation_result is: $validation_result expectedOutput is: $expectedOutput"
 if [ "$validation_result" == "$expectedOutput" ]; then
   echo "cert.pem: OK"
 else
@@ -94,7 +97,7 @@ echo "keyExchange_response is: $keyExchange_response"
 encryptedSampleMessage=$(echo "$keyExchange_response" | jq -r '.encryptedSampleMessage')
 if [[ "$encryptedSampleMessage" == U2FsdGVkX1* ]]; then
   # Decode the encrypted message from Base64
-  decoded_message=$(echo "$encryptedSampleMessage" | base64 -d)
+  decoded_message=$(echo "$encryptedSampleMessage" | base64 -d | tr -d '\0')
 else
   echo "Encrypted sample message format is not recognized."
   exit 1
@@ -115,12 +118,13 @@ decrypted_message=$(echo "$decoded_message" | openssl enc -d -aes-256-cbc -pbkdf
 #  echo "Decryption failed."
 #  exit 7
 #fi
-echo "The decrypted message is: $decrypted_message"
+echo "The decrypted message is:$decrypted_message"
 echo "$decrypted_message" | od -c
+echo "$sampleMessage" | od -c
+
 
 # Trim leading and trailing whitespace
 echo cleaned_decrypted=$(echo "$decrypted_message" | tr -d '\017')
-echo "$sampleMessage" | od -c
 echo cleaned_sample=$(echo "$sampleMessage" | tr -d '\017')
 if [ "$cleaned_decrypted" = "$cleaned_sample" ]; then
   echo "Client-Server TLS handshake has been completed successfully"
