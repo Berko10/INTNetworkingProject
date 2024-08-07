@@ -122,7 +122,6 @@ echo "The decrypted message is:$decrypted_message"
 echo "$decrypted_message" | od -c
 echo "$sampleMessage" | od -c
 
-
 # Trim leading and trailing whitespace
 cleaned_decrypted=$(echo "$decrypted_message" | tr -d '\017')
 cleaned_sample=$(echo "$sampleMessage" | tr -d '\017')
