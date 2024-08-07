@@ -124,8 +124,10 @@ echo "$sampleMessage" | od -c
 
 
 # Trim leading and trailing whitespace
-echo cleaned_decrypted=$(echo "$decrypted_message" | tr -d '\017')
-echo cleaned_sample=$(echo "$sampleMessage" | tr -d '\017')
+cleaned_decrypted=$(echo "$decrypted_message" | tr -d '\017')
+cleaned_sample=$(echo "$sampleMessage" | tr -d '\017')
+echo "cleaned message is: $cleaned_sample"
+echo "cleaned_decrypted is: $cleaned_decrypted"
 if [ "$cleaned_decrypted" = "$cleaned_sample" ]; then
   echo "Client-Server TLS handshake has been completed successfully"
 else
